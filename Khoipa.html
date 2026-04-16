@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tổng Hợp Ứng Dụng - AppHub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; }
+    .app-card {
+      transition: all 0.3s ease;
+    }
+    .app-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+    .search-input {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">A</div>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">AppHub</h1>
+          <p class="text-xs text-gray-500 -mt-1">Tổng hợp ứng dụng</p>
+        </div>
+      </div>
+      
+      <div class="flex-1 max-w-xl mx-8">
+        <div class="relative">
+          <input 
+            id="searchInput"
+            type="text" 
+            placeholder="Tìm kiếm ứng dụng..." 
+            class="search-input w-full bg-gray-100 border border-gray-300 focus:border-blue-500 focus:bg-white pl-12 py-3 rounded-3xl text-sm outline-none">
+          <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button onclick="toggleDarkMode()" class="p-3 hover:bg-gray-100 rounded-2xl">
+          <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
+        </button>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-3xl font-medium flex items-center gap-2">
+          <i class="fa-solid fa-plus"></i>
+          <span>Thêm ứng dụng</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+      <div class="bg-white p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 text-sm">Tổng ứng dụng</p>
+        <p id="totalApps" class="text-4xl font-bold text-gray-900 mt-1">24</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 text-sm">Web App</p>
+        <p class="text-4xl font-bold text-emerald-600 mt-1">12</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 text-sm">Mobile App</p>
+        <p class="text-4xl font-bold text-purple-600 mt-1">8</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 text-sm">Công cụ</p>
+        <p class="text-4xl font-bold text-amber-600 mt-1">4</p>
+      </div>
+    </div>
+
+    <!-- Apps Grid -->
+    <div id="appsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- JavaScript sẽ tự động tạo các card ở đây -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-16 py-8">
+    <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm">
+      Tổng hợp Ứng dụng © 2026 - Được tạo bởi Grok
+    </div>
+  </footer>
+
+  <script>
+    // Dữ liệu các ứng dụng (bạn có thể chỉnh sửa thoải mái)
+    const apps = [
+      {
+        id: 1,
+        name: "ChatGPT",
+        category: "AI",
+        icon: "fa-solid fa-robot",
+        color: "bg-green-500",
+        desc: "Trợ lý AI thông minh nhất thế giới",
+        type: "Web",
+        link: "https://chat.openai.com"
+      },
+      {
+        id: 2,
+        name: "Canva",
+        category: "Design",
+        icon: "fa-solid fa-palette",
+        color: "bg-pink-500",
+        desc: "Thiết kế đồ họa không cần kỹ năng",
+        type: "Web",
+        link: "https://canva.com"
+      },
+      {
+        id: 3,
+        name: "Notion",
+        category: "Productivity",
+        icon: "fa-solid fa-notebook",
+        color: "bg-blue-600",
+        desc: "All-in-one workspace",
+        type: "Web",
+        link: "https://notion.so"
+      },
+      {
+        id: 4,
+        name: "Figma",
+        category: "Design",
+        icon: "fa-solid fa-vector-square",
+        color: "bg-purple-600",
+        desc: "Công cụ thiết kế giao diện",
+        type: "Web",
+        link: "https://figma.com"
+      },
+      {
+        id: 5,
+        name: "Midjourney",
+        category: "AI",
+        icon: "fa-solid fa-image",
+        color: "bg-violet-600",
+        desc: "Tạo ảnh bằng AI mạnh nhất",
+        type: "Web",
+        link: "#"
+      },
+      {
+        id: 6,
+        name: "Trello",
+        category: "Productivity",
+        icon: "fa-solid fa-columns",
+        color: "bg-cyan-500",
+        desc: "Quản lý công việc theo Kanban",
+        type: "Web",
+        link: "https://trello.com"
+      },
+      {
+        id: 7,
+        name: "CapCut",
+        category: "Video",
+        icon: "fa-solid fa-video",
+        color: "bg-red-500",
+        desc: "Chỉnh sửa video chuyên nghiệp",
+        type: "Mobile",
+        link: "#"
+      },
+      {
+        id: 8,
+        name: "Excalidraw",
+        category: "Design",
+        icon: "fa-solid fa-pencil",
+        color: "bg-orange-500",
+        desc: "Vẽ sơ đồ tay nhanh chóng",
+        type: "Web",
+        link: "https://excalidraw.com"
+      }
+    ];
+
+    // Render tất cả ứng dụng
+    function renderApps(filteredApps) {
+      const container = document.getElementById('appsGrid');
+      container.innerHTML = '';
+
+      filteredApps.forEach(app => {
+        const card = document.createElement('div');
+        card.className = `app-card bg-white rounded-3xl overflow-hidden border border-gray-200`;
+        card.innerHTML = `
+          <div class="p-6">
+            <div class="${app.color} w-14 h-14 rounded-2xl flex items-center justify-center text-white text-3xl mb-4">
+              <i class="${app.icon}"></i>
+            </div>
+            <h3 class="font-semibold text-xl text-gray-900 mb-1">${app.name}</h3>
+            <p class="text-sm text-gray-500 mb-3">${app.category} • ${app.type}</p>
+            <p class="text-gray-600 text-sm line-clamp-2">${app.desc}</p>
+          </div>
+          <div class="border-t border-gray-100 px-6 py-4 flex justify-between items-center">
+            <span class="text-xs font-medium px-3 py-1 bg-gray-100 text-gray-600 rounded-full">${app.category}</span>
+            <a href="${app.link}" target="_blank" 
+               class="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 text-sm">
+              Truy cập <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Tìm kiếm
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const filtered = apps.filter(app => 
+        app.name.toLowerCase().includes(searchTerm) ||
+        app.desc.toLowerCase().includes(searchTerm) ||
+        app.category.toLowerCase().includes(searchTerm)
+      );
+      renderApps(filtered);
+    });
+
+    // Dark mode
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      const icon = document.getElementById('themeIcon');
+      if (document.documentElement.classList.contains('dark')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        document.documentElement.style.backgroundColor = '#111827';
+      } else {
+        icon.classList.add('fa-moon');
+        icon.classList.remove('fa-sun');
+      }
+    }
+
+    // Khởi chạy
+    window.onload = () => {
+      renderApps(apps);
+      document.getElementById('totalApps').textContent = apps.length;
+    };
+  </script>
+</body>
+</html>
